@@ -1,0 +1,48 @@
+﻿@model IEnumerable<BookStroe.Models.BookModel>
+
+@{
+    ViewData["Title"] = "GetAllBook";
+}
+
+<h1 class="text-center">Books Available in Store</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td>
+                @{ 
+                    var price = item.Price;
+                    price -= ((item.Discount * item.Price) / 100);
+                }
+                <p>@price</p>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditBook", new { id = item.Id }) |
+                @Html.ActionLink("Details", "GetBookById", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteBook", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
