@@ -1,5 +1,6 @@
 ﻿using BookStroe.Data;
 using BookStroe.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace BookStroe.Repository
         }
         public BookModel GetBookById(int? id)
         {
-            return _DBContext.BookModel.Where(c => c.Id == id).FirstOrDefault();
+            BookModel book =  _DBContext.BookModel.Include(e=>e.booktype).Where(c => c.Id == id).FirstOrDefault();
+            return book;
         }
 
         public List<BookModel> SearchBook(string title, string authorName)

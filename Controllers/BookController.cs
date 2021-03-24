@@ -2,6 +2,7 @@
 using BookStroe.Models;
 using BookStroe.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace BookStroe.Controllers
     public class BookController : Controller
     {
         private readonly IBookRepository _bookRepository = null;
-        public BookController(IBookRepository bookRepository)
+        private readonly BookTypeRepository _bookTypeRepository = null;
+        public BookController(IBookRepository bookRepository, BookTypeRepository bookTypeRepository)
         {
             _bookRepository = bookRepository;
+            _bookTypeRepository = bookTypeRepository;
         }
 
         public IActionResult GetAllBook()
@@ -36,7 +39,8 @@ namespace BookStroe.Controllers
         }
 
         public IActionResult AddBook()
-        { 
+        {
+            ViewBag.BookTypeId = new SelectList(_bookTypeRepository.getAllBookType(),"Id", "TypeName") ;
             return View();
         }
 

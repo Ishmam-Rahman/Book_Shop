@@ -32,7 +32,7 @@ namespace BookStroe
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<BookTypeRepository, BookTypeRepository>();
+            services.AddScoped<IBookTypeRepository, BookTypeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

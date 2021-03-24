@@ -10,9 +10,9 @@ namespace BookStroe.Controllers
 {
     public class BookTypeController : Controller
     {
-        private readonly BookTypeRepository _bookTypeReository;
+        private readonly IBookTypeRepository _bookTypeReository;
         
-        public BookTypeController(BookTypeRepository bookTypeRepository)
+        public BookTypeController(IBookTypeRepository bookTypeRepository)
         {
             _bookTypeReository = bookTypeRepository;
         }
