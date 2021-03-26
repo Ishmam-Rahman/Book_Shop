@@ -1,10 +1,12 @@
 ﻿using BookStroe.Data;
 using BookStroe.Models;
 using BookStroe.Repository;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,11 +15,13 @@ namespace BookStroe.Controllers
     public class BookController : Controller
     {
         private readonly IBookRepository _bookRepository = null;
-        private readonly BookTypeRepository _bookTypeRepository = null;
-        public BookController(IBookRepository bookRepository, BookTypeRepository bookTypeRepository)
+        private readonly IBookTypeRepository _bookTypeRepository = null;
+        private readonly IWebHostEnvironment _webHostEnvironment = null;
+        public BookController(IBookRepository bookRepository, IBookTypeRepository bookTypeRepository, IWebHostEnvironment webHostEnvironment)
         {
             _bookRepository = bookRepository;
             _bookTypeRepository = bookTypeRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult GetAllBook()
@@ -47,6 +51,15 @@ namespace BookStroe.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook(BookModel Book)
         {
+            if (Book.Photo != null)
+            {
+                string folder = "books/";
+                folder += Book.Photo.FileName+Guid.NewGuid().ToString();
+                Book.PhotoURL = "/"+folder;
+                string serverfolder = Path.Combine( _webHostEnvironment.WebRootPath, folder);
+
+                await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
+            }
             int ID = await _bookRepository.AddBook(Book);
             if (ID > 0)
             {

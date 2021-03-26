@@ -44,6 +44,7 @@ namespace BookStroe.Controllers
         {
             return View(_bookTypeReository.getTypeById(ID));
         }
+
         [HttpPost]
         public async Task<IActionResult> EditBookType(BookType bookType)
         {

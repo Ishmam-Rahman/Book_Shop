@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,9 +20,16 @@ namespace BookStroe.Models
         public int Price { get; set; }
         public int Discount { get; set; }
         
+      
         
         public int BookTypeId { get; set; }
         [ForeignKey("BookTypeId")]
         public BookType booktype { get; set; }
+        
+        [Required]
+        [Display(Name ="Choose the photo")]
+        [NotMapped]
+        public IFormFile Photo { get; set; }
+        public string PhotoURL { get; set; }
     }
 }
