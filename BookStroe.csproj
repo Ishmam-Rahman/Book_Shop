@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\books\" />
+    <Folder Include="wwwroot\pdf\" />
   </ItemGroup>
 
 </Project>

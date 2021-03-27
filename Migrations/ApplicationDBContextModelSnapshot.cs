@@ -43,6 +43,9 @@ namespace BookStroe.Migrations
                     b.Property<int>("Pages")
                         .HasColumnType("int");
 
+                    b.Property<string>("PdfURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhotoURL")
                         .HasColumnType("nvarchar(max)");
 

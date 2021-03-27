@@ -57,6 +57,15 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Pdf" class="custom-file-input" id="customFile"></label>
+                <div class="custom-file">
+                    <input asp-for="Pdf" class="custom-file-input" />
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+                <span asp-validation-for="Pdf" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

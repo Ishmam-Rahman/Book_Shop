@@ -25,6 +25,7 @@
             </div>
             <div class="form-group">
                 <input asp-for="PhotoURL" class="form-control" type="hidden" />
+                <input asp-for="PdfURL" class="form-control" type="hidden" />
             </div>
 
             <div class="form-group">
@@ -56,9 +57,18 @@
                 <label asp-for="Photo" class="custom-file-input" id="customFile"></label>
                 <div class="custom-file">
                     <input asp-for="Photo" class="custom-file-input" />
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <label class="custom-file-label" for="customFile">Choose Image file</label>
                 </div>
                 <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Pdf" class="custom-file-input" id="customFile"></label>
+                <div class="custom-file">
+                    <input asp-for="Pdf" class="custom-file-input" />
+                    <label class="custom-file-label" for="customFile">Choose Pdf file</label>
+                </div>
+                <span asp-validation-for="Pdf" class="text-danger"></span>
             </div>
 
             <div class="form-group">

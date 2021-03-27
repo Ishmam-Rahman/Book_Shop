@@ -4,13 +4,13 @@
     ViewData["Title"] = "GetAllBook";
 }
 
-<div class="container">
-    <h3 class="display-4">All Books</h3>
+<div class="container" style="background-color:black">
+    <h3 class="display-4 text-center" style="color:blueviolet" >All Books</h3>
     <div class="row">
         @foreach(var book in Model)
         {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
+            <div class="col-md-4" style="background-color:orangered">
+                <div class="card mb-4 shadow-sm" style="background-color:yellow">
                     <img src="@book.PhotoURL" class="img-thumbnail" />
                     <div class="card-body">
                         <h3 class="card-title">@book.Title</h3>
@@ -19,7 +19,7 @@
                             <div class="btn-group">
                                 <a asp-action="GetBookById" asp-route-Id="@book.Id" class="btn btn-outline-secondary">View details</a>
                             </div>
-                            <small class="text-muted">@book.Author</small>
+                            <small class="text-dark">@book.Author</small>
                         </div>
                     </div>
                 </div>

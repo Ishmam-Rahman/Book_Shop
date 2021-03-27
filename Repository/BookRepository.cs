@@ -54,7 +54,9 @@ namespace BookStroe.Repository
         {
             BookModel Book = _DBContext.BookModel.Where(c => c.Id == book.Id).AsNoTracking().FirstOrDefault();
             string path = Path.Combine(_webHostEnvironment.WebRootPath, Book.PhotoURL.Remove(0, 1));
+            string pdfpath = Path.Combine(_webHostEnvironment.WebRootPath, Book.PdfURL.Remove(0, 1));
             File.Delete(path);
+            File.Delete(pdfpath);
 
             _DBContext.BookModel.Remove(book);
             await _DBContext.SaveChangesAsync();

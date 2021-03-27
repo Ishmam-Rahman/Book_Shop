@@ -70,6 +70,21 @@ namespace BookStroe.Controllers
                 //await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
             }
 
+            if (Book.Pdf != null)
+            {
+                string folder = "pdf/";
+                folder += (Guid.NewGuid().ToString() + "_" + Book.Pdf.FileName);
+                Book.PdfURL = "/" + folder;
+
+                string serverfolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+
+                using (var fileStream = new FileStream(serverfolder, FileMode.Create))
+                {
+                    await Book.Pdf.CopyToAsync(fileStream);
+                }
+                //await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
+            }
+
 
             int ID = await _bookRepository.AddBook(Book);
             if (ID > 0)
@@ -109,6 +124,23 @@ namespace BookStroe.Controllers
                 //await book.Photo.CopyToAsync(new FileStream(serverfolder, FileMode.Create));
             }
 
+            if (book.Pdf != null)
+            {
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, book.PdfURL.Remove(0, 1));
+                System.IO.File.Delete(path);
+
+                string folder = "pdf/";
+                folder += (Guid.NewGuid().ToString() + "_" + book.Pdf.FileName);
+                book.PdfURL = "/" + folder;
+
+                string serverfolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+
+                using (var fileStream = new FileStream(serverfolder, FileMode.Create))
+                {
+                    await book.Pdf.CopyToAsync(fileStream);
+                }
+                //await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
+            }
             int ID = await _bookRepository.UpdateBook(book);
             
             if (ID > 0)

@@ -21,7 +21,6 @@ namespace BookStroe.Models
         public int Discount { get; set; }
         
       
-        
         public int BookTypeId { get; set; }
         [ForeignKey("BookTypeId")]
         public BookType booktype { get; set; }
@@ -31,5 +30,11 @@ namespace BookStroe.Models
         [NotMapped]
         public IFormFile Photo { get; set; }
         public string PhotoURL { get; set; }
+
+        [Required]
+        [Display(Name = "Upload Pdf")]
+        [NotMapped]
+        public IFormFile Pdf { get; set; }
+        public string PdfURL { get; set; }
     }
 }
