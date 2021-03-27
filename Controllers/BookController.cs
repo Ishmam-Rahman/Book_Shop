@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+
 
 namespace BookStroe.Controllers
 {
@@ -17,11 +19,13 @@ namespace BookStroe.Controllers
         private readonly IBookRepository _bookRepository = null;
         private readonly IBookTypeRepository _bookTypeRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment = null;
-        public BookController(IBookRepository bookRepository, IBookTypeRepository bookTypeRepository, IWebHostEnvironment webHostEnvironment)
+        private readonly ApplicationDBContext _DBContext;
+        public BookController(ApplicationDBContext DBContext,IBookRepository bookRepository, IBookTypeRepository bookTypeRepository, IWebHostEnvironment webHostEnvironment)
         {
             _bookRepository = bookRepository;
             _bookTypeRepository = bookTypeRepository;
             _webHostEnvironment = webHostEnvironment;
+            _DBContext = DBContext;
         }
 
         public IActionResult GetAllBook()
@@ -54,12 +58,19 @@ namespace BookStroe.Controllers
             if (Book.Photo != null)
             {
                 string folder = "books/";
-                folder += Book.Photo.FileName+Guid.NewGuid().ToString();
+                folder += (Guid.NewGuid().ToString()+"_" + Book.Photo.FileName);
                 Book.PhotoURL = "/"+folder;
+
                 string serverfolder = Path.Combine( _webHostEnvironment.WebRootPath, folder);
 
-                await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
+                using (var fileStream = new FileStream(serverfolder, FileMode.Create))
+                {
+                    await Book.Photo.CopyToAsync(fileStream);
+                }
+                //await Book.Photo.CopyToAsync(new FileStream(serverfolder,FileMode.Create));
             }
+
+
             int ID = await _bookRepository.AddBook(Book);
             if (ID > 0)
             {
@@ -71,6 +82,8 @@ namespace BookStroe.Controllers
         public IActionResult EditBook(int? id)
         {
             if (id == null) return NotFound();
+
+            ViewBag.BookTypeId = new SelectList(_bookTypeRepository.getAllBookType(), "Id", "TypeName");
             var bookdetails = _bookRepository.GetBookById(id);
             ViewData["BookTitle"] = (bookdetails.Title + " by " + bookdetails.Author);
             return View(bookdetails);
@@ -79,6 +92,23 @@ namespace BookStroe.Controllers
         [HttpPost]
         public async Task<IActionResult> EditBook(BookModel book)
         {
+            if (book.Photo != null)
+            {
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, book.PhotoURL.Remove(0, 1));
+                System.IO.File.Delete(path);
+
+                string folder = "books/";
+                folder += (Guid.NewGuid().ToString() + "_" + book.Photo.FileName);
+                book.PhotoURL = "/" + folder;
+
+                string serverfolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                using (var fileStream = new FileStream(serverfolder, FileMode.Create))
+                {
+                    await book.Photo.CopyToAsync(fileStream);
+                }
+                //await book.Photo.CopyToAsync(new FileStream(serverfolder, FileMode.Create));
+            }
+
             int ID = await _bookRepository.UpdateBook(book);
             
             if (ID > 0)

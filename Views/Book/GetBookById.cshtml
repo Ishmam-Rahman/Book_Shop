@@ -51,8 +51,15 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Discount)
         </dd>
+        <dt class="col-sm-2">
+            Uploaded Image
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.PhotoURL" asp-append-version="true" class="figure-img" width="271" height="156" />
+        </dd>
     </dl>
 </div>
 <div>
     <a asp-action="EditBook" asp-route-id="@Model.Id" class="btn btn-dark">Edit</a>
+    <a asp-action="DeleteBook" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
 </div>
