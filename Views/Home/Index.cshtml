@@ -11,29 +11,10 @@
             Book is the best friend of a man. Read book, keep mind sound. 
         </p>
         <p>
-            <a href="#" class="btn btn-primary my-2">Search Book</a>
+            <a href="#" class="btn btn-primary my-1">Search Book</a>
+            <h1>@ViewData["sort"]</h1>
         </p>
     </div>
 </section>
-  
-<div class="py-5 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <p>Book1</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <p>Book2</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <p>Book3</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
+@await Component.InvokeAsync("TopBooks")
+

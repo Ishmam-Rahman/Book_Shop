@@ -2,6 +2,7 @@
 using BookStroe.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,15 +15,22 @@ namespace BookStroe.Repository
     {
         private readonly ApplicationDBContext _DBContext;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public BookRepository(ApplicationDBContext DBContext, IWebHostEnvironment webHostEnvironment)
+        private readonly IConfiguration _configuration;
+        public BookRepository(ApplicationDBContext DBContext, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _DBContext = DBContext;
             _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         public List<BookModel> GetAllBook()
         {
             return _DBContext.BookModel.ToList();
+        }
+
+        public List<BookModel> GetTopBooks()
+        {
+            return _DBContext.BookModel.Take(5).ToList();
         }
         public BookModel GetBookById(int? id)
         {
