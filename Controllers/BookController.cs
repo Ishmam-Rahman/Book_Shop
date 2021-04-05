@@ -9,8 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStroe.Controllers
 {
@@ -41,17 +40,19 @@ namespace BookStroe.Controllers
             return View(book);
         }
 
-        public IActionResult SearchBook(string title, string author)
+        public IActionResult SearchBook(string? title, string? author)
         {
             return View("GetAllBook", _bookRepository.SearchBook(title, author).ToList());
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult AddBook()
         {
             ViewBag.BookTypeId = new SelectList(_bookTypeRepository.getAllBookType(),"Id", "TypeName") ;
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddBook(BookModel Book)
         {
@@ -94,6 +95,7 @@ namespace BookStroe.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult EditBook(int? id)
         {
             if (id == null) return NotFound();
@@ -104,6 +106,7 @@ namespace BookStroe.Controllers
             return View(bookdetails);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> EditBook(BookModel book)
         {
@@ -150,13 +153,16 @@ namespace BookStroe.Controllers
             return View(book);
         }
 
+
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteBook(int? ID)
         {
             var bookdetails = _bookRepository.GetBookById(ID);
             ViewData["BookTitle"] = (bookdetails.Title + " by " + bookdetails.Author);
             return View(bookdetails);
         }
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteBook(BookModel book)
         {

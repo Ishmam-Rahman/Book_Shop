@@ -1,4 +1,5 @@
 using BookStroe.Data;
+using BookStroe.Models;
 using BookStroe.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStroe.Claims;
+using BookStroe.Services;
+using BookStroe.ViewModel;
 
 namespace BookStroe
 {
@@ -28,14 +32,38 @@ namespace BookStroe
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDBContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/signin";
+            });
+
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+               // options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
 
             services.AddControllersWithViews();
+
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IBookTypeRepository, BookTypeRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>(); 
+
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
+
+            services.Configure<SMTPConfigViewModel>(Configuration.GetSection("SMTPConfig"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,8 +84,10 @@ namespace BookStroe
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BookStroe.Models.BookModel>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Your Cart</h1>
+
+<br />
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Book Generic</th>
+                <th>Price</th>
+                <th>Discount Price</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.PhotoURL" width="200" height="150" />
+                    </td>
+                    <td>@item.Title</td>
+                    <td>@item.Author</td>
+                    <td>@item.booktype.TypeName</td>
+                    <td>@item.Price</td>
+                    <td>@(item.Price-(item.Discount*item.Price)/100)</td>
+                    <td>
+                        <a asp-action="RemoveFromCart" asp-controller="Home" asp-route-id="@item.Id">
+                            <i class="fa fa-trash-o" style="font-size:28px;color:red"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-6">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-success"> Back to Home</a>
+    </div>
+    <div class="col-6 text-right">
+        <h3>Total Amount: @Model.Sum(c=> c.Price - (c.Discount * c.Price) / 100) Taka</h3>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-info"> Checkout</a>
+    </div>
+</div>

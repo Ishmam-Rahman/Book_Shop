@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using System.Net.Http
+@using BookStroe.Utility;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    List<BookModel> books = HttpContextAccessor.HttpContext.Session.Get<List<BookModel>>("books");
+    if (books == null)
+    {
+        books = new List<BookModel>();
+    }
+
+    int count = books.Count();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +22,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/myStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -20,6 +36,9 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav">
+                        <partial name="_UserInfo" />
+                    </ul>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -35,6 +54,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="BookType" asp-action="AllBookType">Book Type</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Cart">
+                                <i class="fa fa-shopping-cart" style="font-size:22px;color:blue"> (@count)</i>
+                               
+                            </a>
                         </li>
                     </ul>
                 </div>

@@ -38,10 +38,11 @@ namespace BookStroe.Repository
             return book;
         }
 
-        public List<BookModel> SearchBook(string title, string authorName)
+        public List<BookModel> SearchBook(string? title, string? authorName)
         {
             return _DBContext.BookModel.Where(c => c.Title.Contains(title) || c.Author.Contains(authorName)).ToList();
         }
+
 
         public async Task<int> AddBook(BookModel book)
         {
@@ -61,6 +62,7 @@ namespace BookStroe.Repository
         public async Task<BookModel> RemoveBook(BookModel book)
         {
             BookModel Book = _DBContext.BookModel.Where(c => c.Id == book.Id).AsNoTracking().FirstOrDefault();
+
             string path = Path.Combine(_webHostEnvironment.WebRootPath, Book.PhotoURL.Remove(0, 1));
             string pdfpath = Path.Combine(_webHostEnvironment.WebRootPath, Book.PdfURL.Remove(0, 1));
             File.Delete(path);

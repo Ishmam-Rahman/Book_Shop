@@ -1,5 +1,6 @@
 ﻿using BookStroe.Models;
 using BookStroe.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookStroe.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BookTypeController : Controller
     {
         private readonly IBookTypeRepository _bookTypeReository;
