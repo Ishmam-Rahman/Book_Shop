@@ -49,6 +49,6 @@
     </div>
     <div class="col-6 text-right">
         <h3>Total Amount: @Model.Sum(c=> c.Price - (c.Discount * c.Price) / 100) Taka</h3>
-        <a asp-action="Index" asp-controller="Home" class="btn btn-info"> Checkout</a>
+        <a asp-action="Checkout" asp-controller="Home" class="btn btn-info"> Checkout</a>
     </div>
 </div>

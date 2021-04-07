@@ -25,5 +25,8 @@ namespace BookStroe.Models
         [Display(Name = "Birth Date")]
         [DataType(DataType.DateTime)]
         public DateTime BirthDate { get; set; }
+
+       
+        //public ICollection<Order> orderList { get; set; }
     }
 }

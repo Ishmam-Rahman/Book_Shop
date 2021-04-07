@@ -15,14 +15,15 @@ namespace BookStroe.Data
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<OrderDetails>().HasKey(sc => new { sc.BookModelId, sc.OrderId });
+        }
         public DbSet<BookModel> BookModel{ get; set;}
         public DbSet<BookType> BookType { get; set; }
-
-        //protected override void OnModelCreating(Modelbuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<BookType>()
-        //        .HasMany(e => e.BookModel)
-        //        .WithOne(c => c.booktype);
-        //}
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
     }
 }

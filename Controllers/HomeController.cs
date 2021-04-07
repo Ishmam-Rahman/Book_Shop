@@ -22,15 +22,19 @@ namespace BookStroe.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly ApplicationDBContext _applicationDBContext;
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IEmailService emailService, ApplicationDBContext applicationDBContext)
+        private readonly IUserService _userService;
+        public HomeController(ILogger<HomeController> logger,
+            IConfiguration configuration, IEmailService emailService,
+            ApplicationDBContext applicationDBContext, IUserService userService)
         {
             _logger = logger;
             _configuration = configuration;
             _emailService = emailService;
             _applicationDBContext = applicationDBContext;
+            _userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewData["sort"] = _configuration["sortbook"];
 
@@ -42,7 +46,7 @@ namespace BookStroe.Controllers
             //await _emailService.SendTestEmail(options);
 
             return View();
- 
+
         }
 
         //[HttpPost]
@@ -63,7 +67,6 @@ namespace BookStroe.Controllers
             }
             books.Add(book);
             HttpContext.Session.Set("books", books);
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -95,6 +98,35 @@ namespace BookStroe.Controllers
             return View(books);
         }
 
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(Order order)
+        {
+            List<BookModel> books = new List<BookModel>();
+            books = HttpContext.Session.Get<List<BookModel>>("books");
+            order.OrderDetails = new List<OrderDetails>();
+            
+
+            if (books != null)
+            {
+                foreach (var book in books)
+                {
+                    OrderDetails _order = new OrderDetails();
+                    _order.BookModelId = book.Id;
+                    order.OrderDetails.Add(_order);
+                }
+            }
+            //order.ApplicationUserId = _userService.GetUserId();
+            order.OrderDate = DateTime.UtcNow;
+            await _applicationDBContext.Order.AddAsync(order);
+            await _applicationDBContext.SaveChangesAsync();
+            HttpContext.Session.Set("books", new List<BookModel>());
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult Privacy()
         {
             return View();

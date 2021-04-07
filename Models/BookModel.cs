@@ -20,7 +20,7 @@ namespace BookStroe.Models
         public string Category { get; set; }
         public int Price { get; set; }
         public int Discount { get; set; }
-        
+        public ICollection<OrderDetails> Orders { get; set; }
       
         public int BookTypeId { get; set; }
         [ForeignKey("BookTypeId")]
